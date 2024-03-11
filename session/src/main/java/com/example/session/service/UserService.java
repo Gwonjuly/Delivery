@@ -11,15 +11,17 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
     public void login(LoginRequest loginRequest, HttpSession httpSession){
         var id=loginRequest.getId();
         var pw=loginRequest.getPassword();
+
         var optionalUser=userRepository.findByName(id);
         if(optionalUser.isPresent()){
             var userDto=optionalUser.get();
             if(userDto.getPassword().equals(pw)){
                 //세선에 정보저장
-                httpSession.setAttribute("USER",userDto);//USER에 userDto 정보 저장
+                httpSession.setAttribute("USER",userDto);//USER에 userDto 정보 저장 * 세션 인증을 통해 반드시 필요함
             }else{
                 throw new RuntimeException("Password Not Match");
             }
