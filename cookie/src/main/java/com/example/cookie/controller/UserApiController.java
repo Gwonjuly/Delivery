@@ -8,10 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -34,5 +31,14 @@ public class UserApiController {
                 log.info("key:{}, value:{}",cookie.getName(), cookie.getValue());//쿠키는 key:value 한 쌍, key=authorization-cookie
             }
         }*/
+    }
+
+    @GetMapping("/me2")//talend api로 진행
+    public UserDto me2( //header에 "authorization"이라는 header가 있으면 findById에서 그 header 값을 가지고 리턴
+            @RequestHeader(name = "authorization",required = false) String authorizationHeader
+    ){
+        log.info("authorizationHeader:{}",authorizationHeader);
+        var optionalUserDto=userRepository.findById(authorizationHeader);
+        return optionalUserDto.get();
     }
 }
